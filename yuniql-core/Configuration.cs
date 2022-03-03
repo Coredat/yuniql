@@ -117,7 +117,7 @@ namespace Yuniql.Core
         /// Environment to target when running migration with environment-aware scripts.
         /// See https://github.com/rdagumampan/yuniql/wiki/environment-aware-scripts
         /// </summary>
-        public string Environment { get; set; } = null;
+        public string[] Environments { get; set; } = null;
 
         /// <summary>
         /// Schema name for schema versions table.

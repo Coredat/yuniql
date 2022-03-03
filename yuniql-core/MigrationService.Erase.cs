@@ -28,7 +28,7 @@ namespace Yuniql.Core
                     try
                     {
                         //runs all scripts in the _erase folder
-                        RunNonVersionDirectories(connection, transaction, configuration.Workspace, Path.Combine(configuration.Workspace, RESERVED_DIRECTORY_NAME.ERASE), tokens: configuration.Tokens, bulkSeparator: DEFAULT_CONSTANTS.BULK_SEPARATOR, commandTimeout: configuration.CommandTimeout, environment: configuration.Environment);
+                        RunNonVersionDirectories(connection, transaction, configuration.Workspace, Path.Combine(configuration.Workspace, RESERVED_DIRECTORY_NAME.ERASE), tokens: configuration.Tokens, bulkSeparator: DEFAULT_CONSTANTS.BULK_SEPARATOR, commandTimeout: configuration.CommandTimeout, environments: configuration.Environments);
                         _traceService.Info($"Executed script files on {Path.Combine(configuration.Workspace, RESERVED_DIRECTORY_NAME.ERASE)}");
 
                         transaction.Commit();

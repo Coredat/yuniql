@@ -114,7 +114,7 @@ namespace Yuniql.PlatformTests.Core
             //act
             var configuration = _testConfiguration.GetFreshConfiguration();
             configuration.TargetVersion = "v0.00";
-            configuration.Environment = "test";
+            configuration.Environments = new[] { "test" };
 
             var migrationService = _migrationServiceFactory.Create(configuration.Platform);
             migrationService.Run();
@@ -164,7 +164,7 @@ namespace Yuniql.PlatformTests.Core
             //act
             var configuration = _testConfiguration.GetFreshConfiguration();
             configuration.TargetVersion = "v0.00";
-            configuration.Environment = "test";
+            configuration.Environments = new[] { "test" };
 
             var migrationService = _migrationServiceFactory.Create(configuration.Platform);
             migrationService.Run();
@@ -206,7 +206,7 @@ namespace Yuniql.PlatformTests.Core
             //act
             var configuration = _testConfiguration.GetFreshConfiguration();
             configuration.TargetVersion = "v0.00";
-            configuration.Environment = "test";
+            configuration.Environments = new[] { "test" };
 
             var migrationService = _migrationServiceFactory.Create(configuration.Platform);
             migrationService.Run();

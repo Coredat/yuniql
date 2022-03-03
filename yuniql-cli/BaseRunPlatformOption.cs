@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using System;
 using System.Collections.Generic;
 
 namespace Yuniql.CLI
@@ -27,8 +28,8 @@ namespace Yuniql.CLI
         public int BulkBatchSize { get; set; } = 0;
 
         //yuniql <command> --environment "DEV" | --environment "PROD"
-        [Option("environment", Required = false, HelpText = "Environment code for environment-aware scripts.")]
-        public string Environment { get; set; }
+        [Option("environment", Required = false, Separator = ',', HelpText = "Environment code for environment-aware scripts.")]
+        public IEnumerable<string> Environments { get; set; } = new List<string>();
 
         //yuniql <command> --meta-schema "yuniql" 
         [Option("meta-schema", Required = false, HelpText = "Schema name for schema versions table.")]

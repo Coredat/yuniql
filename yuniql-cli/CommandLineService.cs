@@ -67,7 +67,7 @@ namespace Yuniql.CLI
             configuration.BulkBatchSize = opts.BulkBatchSize;
             configuration.MetaSchemaName = opts.MetaSchemaName;
             configuration.MetaTableName = opts.MetaTableName;
-            configuration.Environment = opts.Environment;
+            configuration.Environments = opts.Environments.ToArray();
             configuration.TransactionMode = opts.TransactionMode;
             configuration.IsContinueAfterFailure = opts.IsContinueAfterFailure;
             configuration.IsRequiredClearedDraft = opts.IsRequiredClearedDraft;
@@ -269,7 +269,7 @@ namespace Yuniql.CLI
 
                 configuration.Tokens = tokens;
                 configuration.IsForced = opts.Force;
-                configuration.Environment = opts.Environment;
+                configuration.Environments = opts.Environments.ToArray();
                 configuration.MetaSchemaName = opts.MetaSchemaName;
                 configuration.MetaTableName = opts.MetaTableName;
 

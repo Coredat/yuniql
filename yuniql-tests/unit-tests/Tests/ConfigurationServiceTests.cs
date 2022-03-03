@@ -28,7 +28,7 @@ namespace Yuniql.UnitTests
             };
             configuration.BulkSeparator = ";";
             configuration.BulkBatchSize = 1000;
-            configuration.Environment = "dev";
+            configuration.Environments = new[] { "dev" };
             configuration.MetaSchemaName = "yuniql_schema";
             configuration.MetaTableName = "yuniql_table";
             configuration.TransactionMode = TRANSACTION_MODE.SESSION;
