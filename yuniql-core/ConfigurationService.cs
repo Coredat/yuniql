@@ -50,7 +50,7 @@ namespace Yuniql.Core
             configuration.Tokens = configuration.Tokens;
             configuration.BulkSeparator = configuration.BulkSeparator;
             configuration.BulkBatchSize = configuration.BulkBatchSize;
-            configuration.Environment = configuration.Environment;
+            configuration.Environments = configuration.Environments;
             configuration.MetaSchemaName = configuration.MetaSchemaName;
             configuration.MetaTableName = configuration.MetaTableName;
             configuration.TransactionMode = configuration.TransactionMode;
@@ -89,7 +89,7 @@ namespace Yuniql.Core
             configuration.Tokens = null;
             configuration.BulkSeparator = DEFAULT_CONSTANTS.BULK_SEPARATOR;
             configuration.BulkBatchSize = DEFAULT_CONSTANTS.BULK_BATCH_SIZE;
-            configuration.Environment = null;
+            configuration.Environments = null;
             configuration.MetaSchemaName = null;
             configuration.MetaTableName = null;
             configuration.TransactionMode = TRANSACTION_MODE.SESSION;

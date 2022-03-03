@@ -30,7 +30,7 @@ namespace Yuniql.UnitTests
 
             //act
             var sut = new DirectoryService();
-            var result = sut.FilterFiles(basePath, "test", files).ToList();
+            var result = sut.FilterFiles(basePath, new[] { "test" }, files).ToList();
 
             //asset
             result.Count.ShouldBe(4);
@@ -88,7 +88,7 @@ namespace Yuniql.UnitTests
 
             //act
             var sut = new DirectoryService();
-            var result = sut.FilterFiles(basePath, "test", files).ToList();
+            var result = sut.FilterFiles(basePath, new[] { "test" }, files).ToList();
 
             //asset
             result.Count.ShouldBe(2);
@@ -115,7 +115,7 @@ namespace Yuniql.UnitTests
 
             //act
             var sut = new DirectoryService();
-            var result = sut.FilterFiles(basePath, "test", files).ToList();
+            var result = sut.FilterFiles(basePath, new[] { "test" }, files).ToList();
 
             //asset
             result.Count.ShouldBe(2);
@@ -171,7 +171,7 @@ namespace Yuniql.UnitTests
 
             //act
             var sut = new DirectoryService();
-            var result = sut.FilterFiles(basePath, "prod", files).ToList();
+            var result = sut.FilterFiles(basePath, new[] { "prod" }, files).ToList();
 
             //asset
             result.Count.ShouldBe(4);
@@ -202,7 +202,7 @@ namespace Yuniql.UnitTests
 
             //act
             var sut = new DirectoryService();
-            var result = sut.FilterFiles(basePath, "test", files).ToList();
+            var result = sut.FilterFiles(basePath, new[] { "test" }, files).ToList();
 
             //asset
             result.Count.ShouldBe(3);
@@ -232,7 +232,7 @@ namespace Yuniql.UnitTests
 
             //act
             var sut = new DirectoryService();
-            var result = sut.FilterFiles(basePath, "test", files).ToList();
+            var result = sut.FilterFiles(basePath, new[] { "test" }, files).ToList();
 
             //asset
             result.Count.ShouldBe(3);
@@ -288,6 +288,40 @@ namespace Yuniql.UnitTests
             result[0].ShouldBe(script1);
             result[1].ShouldBe(script2);
             result[2].ShouldBe(script3);
+        }
+
+        [TestMethod]
+        public void Test_Filter_Files_Directories_With_Multiple_Environment_Codes_Passed()
+        {
+            //arrange
+            var basePath = Path.Combine(Environment.CurrentDirectory, "_db", RESERVED_DIRECTORY_NAME.INIT);
+            string script1 = Path.Combine(basePath, "tables", "_setup_tables.sql");
+            string script2 = Path.Combine(basePath, "tables", "_setup_stored_procedures.sql");
+            string script3 = Path.Combine(basePath, "tables", "_dev", "_setup.sql");
+            string script4 = Path.Combine(basePath, "tables", "_test", "_setup.sql");
+            string script5 = Path.Combine(basePath, "tables", "_prod", "_setup.sql");
+            string script6 = Path.Combine(basePath, "tables", "_test_foo", "_setup.sql");
+
+            var files = new List<string>
+            {
+                script1,
+                script2,
+                script3,
+                script4,
+                script5,
+                script6
+            };
+
+            //act
+            var sut = new DirectoryService();
+            var result = sut.FilterFiles(basePath, new[] { "test", "foo" }, files).ToList();
+
+            //asset
+            result.Count.ShouldBe(4);
+            result[0].ShouldBe(script1);
+            result[1].ShouldBe(script2);
+            result[2].ShouldBe(script4);
+            result[3].ShouldBe(script6);
         }
     }
 }

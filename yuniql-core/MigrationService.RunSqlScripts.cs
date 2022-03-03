@@ -24,7 +24,7 @@ namespace Yuniql.Core
             string metaTableName,
             List<KeyValuePair<string, string>> tokens = null,
             int? commandTimeout = null,
-            string environment = null,
+            string[] environments = null,
             string appliedByTool = null,
             string appliedByToolVersion = null
         )
@@ -34,7 +34,7 @@ namespace Yuniql.Core
             {
                 //filter out scripts when environment code is used
                 var sqlScriptFiles = _directoryService.GetFiles(scriptDirectory, "*.sql").ToList();
-                sqlScriptFiles = _directoryService.FilterFiles(workspace, environment, sqlScriptFiles).ToList();
+                sqlScriptFiles = _directoryService.FilterFiles(workspace, environments, sqlScriptFiles).ToList();
                 _traceService.Info($"Found {sqlScriptFiles.Count} script files on {scriptDirectory}" + (sqlScriptFiles.Count > 0 ? Environment.NewLine : string.Empty) +
                        $"{string.Join(Environment.NewLine, sqlScriptFiles.Select(s => "  + " + new FileInfo(s).Name))}");
 
@@ -116,7 +116,7 @@ namespace Yuniql.Core
             IDbTransaction transaction,
             string workspace,
             List<KeyValuePair<string, string>> tokens = null,
-            string environment = null,
+            string[] environments = null,
             int? commandTimeout = null,
             bool isRequiredClearedDraft = false
             )
@@ -131,7 +131,7 @@ namespace Yuniql.Core
                     $"Move the script files to a version directory and re-execute the migration. Or remove --require-cleared-draft in parameter.");
             }
 
-            sqlScriptFiles = _directoryService.FilterFiles(workspace, environment, sqlScriptFiles).ToList();
+            sqlScriptFiles = _directoryService.FilterFiles(workspace, environments, sqlScriptFiles).ToList();
             _traceService.Info($"Found {sqlScriptFiles.Count} script files on {workspace}" + (sqlScriptFiles.Count > 0 ? Environment.NewLine : string.Empty) +
                    $"{string.Join(Environment.NewLine, sqlScriptFiles.Select(s => "  + " + new FileInfo(s).Name))}");
 
@@ -181,13 +181,13 @@ namespace Yuniql.Core
             string bulkSeparator = null,
             int? bulkBatchSize = null,
             int? commandTimeout = null,
-            string environment = null,
+            string[] environments = null,
             List<KeyValuePair<string, string>> tokens = null
         )
         {
             //extract and filter out scripts when environment code is used
             var bulkFiles = _directoryService.GetFiles(scriptDirectory, "*.csv").ToList();
-            bulkFiles = _directoryService.FilterFiles(workspace, environment, bulkFiles).ToList();
+            bulkFiles = _directoryService.FilterFiles(workspace, environments, bulkFiles).ToList();
             _traceService.Info($"Found {bulkFiles.Count} bulk files on {scriptDirectory}" + (bulkFiles.Count > 0 ? Environment.NewLine : string.Empty) +
                    $"{string.Join(Environment.NewLine, bulkFiles.Select(s => "  + " + new FileInfo(s).Name))}");
             bulkFiles.Sort();

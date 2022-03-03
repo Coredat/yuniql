@@ -38,9 +38,9 @@ namespace Yuniql.Core
         /// </summary>
         string GetFileCaseInsensitive(string path, string fileName);
 
-        string[] FilterFiles(string path, string environmentCode, List<string> files);
+        string[] FilterFiles(string path, string[] environmentCodes, List<string> files);
 
-        string[] FilterDirectories(string path, string environmentCode, List<string> directories);
+        string[] FilterDirectories(string path, string[] environmentCodes, List<string> directories);
 
         /// <summary>
         /// Wraps <see cref="Directory.CreateDirectory"/>

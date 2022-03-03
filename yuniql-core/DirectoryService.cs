@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -48,7 +49,7 @@ namespace Yuniql.Core
         }
 
         ///<inheritdoc/>
-        public string[] FilterFiles(string workingPath, string environmentCode, List<string> files)
+        public string[] FilterFiles(string workingPath, string[] environmentCodes, List<string> files)
         {
             var reservedDirectories = new List<string>
             {
@@ -79,13 +80,20 @@ namespace Yuniql.Core
                 );
             });
 
-            if (string.IsNullOrEmpty(environmentCode) && !hasEnvironmentAwareDirectories)
+            if ((environmentCodes == null || environmentCodes.Length == 0) && !hasEnvironmentAwareDirectories)
                 return files.ToArray();
 
             //throws exception when no environment code passed but environment-aware directories are present
-            if (string.IsNullOrEmpty(environmentCode) && hasEnvironmentAwareDirectories)
+            if ((environmentCodes == null || environmentCodes.Length == 0) && hasEnvironmentAwareDirectories)
                 throw new YuniqlMigrationException("Found environment aware directories but no environment code passed. " +
                     "See https://github.com/rdagumampan/yuniql/wiki/environment-aware-scripts.");
+
+            var possibleEnvironmentFolders = (environmentCodes ?? Array.Empty<string>())
+                    .Select(x => $"{RESERVED_DIRECTORY_NAME.PREFIX}{x}")
+                    .GenerateCombinations()
+                    .Where(x => x.Length > 0)
+                    .Select(x => String.Join("", x))
+                    .ToHashSet();
 
             //remove all script files from environment-aware directories except the target environment
             var sqlScriptFiles = new List<string>(files);
@@ -94,7 +102,10 @@ namespace Yuniql.Core
                 var fileParts = Split(new DirectoryInfo(Path.GetDirectoryName(f))).Where(x => !x.Equals(RESERVED_DIRECTORY_NAME.TRANSACTION, System.StringComparison.InvariantCultureIgnoreCase)).ToList();
                 fileParts.Reverse();
 
-                var foundFile = fileParts.Skip(directoryPathParts.Count).FirstOrDefault(a => a.StartsWith(RESERVED_DIRECTORY_NAME.PREFIX) && a.ToLower() != $"{RESERVED_DIRECTORY_NAME.PREFIX}{environmentCode}");
+                var foundFile = fileParts.Skip(directoryPathParts.Count).FirstOrDefault(a => {
+
+                    return a.StartsWith(RESERVED_DIRECTORY_NAME.PREFIX) && !possibleEnvironmentFolders.Contains(a.ToLower());
+                });
                 if (null != foundFile)
                     sqlScriptFiles.Remove(f);
             });
@@ -103,7 +114,7 @@ namespace Yuniql.Core
         }
 
         ///<inheritdoc/>
-        public string[] FilterDirectories(string workingPath, string environmentCode, List<string> directories)
+        public string[] FilterDirectories(string workingPath, string[] environmentCodes, List<string> directories)
         {
             throw new System.NotImplementedException();
         }
