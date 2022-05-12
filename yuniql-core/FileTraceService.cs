@@ -10,27 +10,28 @@ namespace Yuniql.Core
     public class FileTraceService : ITraceService
     {
         private string _traceSessionId;
-        private IDirectoryService _directoryService;
 
         ///<inheritdoc/>
-        public FileTraceService(IDirectoryService directoryService)
+        public FileTraceService()
         {
             _traceSessionId = DateTime.Now.ToString("MMddyyyy-HHmmss");
-            _directoryService = directoryService;
         }
 
         ///<inheritdoc/>
-        public bool IsDebugEnabled { get; set; } = false;
+        public bool IsDebugEnabled { get; set; }
 
         ///<inheritdoc/>
-        public bool IsTraceSensitiveData { get; set; } = false;
+        public bool IsTraceSensitiveData { get; set; }
 
         ///<inheritdoc/>
-        public bool IsTraceToFile { get; set; } = true;
+        public bool IsTraceToFile { get; set; }
+
+        ///<inheritdoc/>
+        public bool IsTraceToDirectory { get; set; }
 
         private string _traceDirectory;
         ///<inheritdoc/>
-        public string TraceToDirectory 
+        public string TraceDirectory 
         {
             get
             {
@@ -39,11 +40,11 @@ namespace Yuniql.Core
             set
             {
                 //when user specified location but it does not exist
-                if (value != null && !_directoryService.Exists(value))
+                if (value != null && !Directory.Exists(value))
                 {
-                    Warn($"The provided trace directory does not exist. " +
+                    Warn($"The provided trace directory {value} does not exist. " +
                         $"Generated logs will be saved in the current directory {Environment.CurrentDirectory}.");
-                } else if (_directoryService.Exists(value))
+                } else if (Directory.Exists(value))
                 {
                     //an existing trace directory will be used
                     _traceDirectory = value;
@@ -135,14 +136,22 @@ namespace Yuniql.Core
 
         private string GetTraceSessionFilePath()
         {
-            if (TraceToDirectory != null)
+            var traceFilePath = string.Empty;
+            if (IsTraceToDirectory && TraceDirectory != null)
             {
-                return Path.Combine(TraceToDirectory, $"yuniql-log-{_traceSessionId}.txt");
+                traceFilePath = Path.Combine(TraceDirectory, $"yuniql-log-{_traceSessionId}.txt");
             }
             else
             {
-                return Path.Combine(Environment.CurrentDirectory, $"yuniql-log-{_traceSessionId}.txt");
+                traceFilePath = Path.Combine(Environment.CurrentDirectory, $"yuniql-log-{_traceSessionId}.txt");
             }
+
+            if (!File.Exists(traceFilePath))
+            {
+                Console.WriteLine($"INF   {DateTime.UtcNow.ToString("u")}   Trace logs for the current session is located at {traceFilePath}.");
+            }
+
+            return traceFilePath;
         }
 
     }

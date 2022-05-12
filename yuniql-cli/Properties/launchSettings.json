@@ -2,7 +2,7 @@
   "profiles": {
     "Yuniql.CLI": {
       "commandName": "Project",
-      "commandLineArgs": "run -a --debug --environment \"dev,tmf\" --platform postgresql -c \"Server=127.0.0.1;Port=5432;Database=HRPoC;User Id=postgres;Password=postgres;\" -p \"C:\\workspace\\HR\\src\\Documents\\Database\\documents\""
+      "commandLineArgs": "run -a --debug --trace-to-file --environment \"dev,tmf\" --platform postgresql -c \"Server=127.0.0.1;Port=5432;Database=HRPoC;User Id=postgres;Password=postgres;\" -p \"C:\\workspace\\HR\\src\\Documents\\Database\\documents\""
     }
   }
 }
