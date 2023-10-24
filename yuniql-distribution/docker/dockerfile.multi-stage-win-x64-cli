@@ -14,5 +14,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime-env
 WORKDIR app
 COPY --from=build-env /code/yuniql-cli/app .
 
-ENTRYPOINT ["dotnet", "yuniql.dll", "run", "-p", "db"]
+ENV YUNIQL_WORKSPACE /data
+
+ENTRYPOINT ["dotnet", "yuniql.dll"]
 CMD ["additional-arguments-captured-from-docker-run"]
